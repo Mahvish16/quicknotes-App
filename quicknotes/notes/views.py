@@ -43,3 +43,9 @@ class NotesView(generics.GenericAPIView):
             return Response({"message":"Notes created Successfully"},status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def get(self,request, *args,**kwargs):
+        user = request.user
+        notes = Notes.objects.filter(user=user)
+        serializer = self.get_serializer(notes,many=True)
+        return Response(serializer.data)
+    
