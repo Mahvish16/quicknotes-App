@@ -49,3 +49,28 @@ class NotesView(generics.GenericAPIView):
         serializer = self.get_serializer(notes,many=True)
         return Response(serializer.data)
     
+    def put (self, request,pk):
+        try:
+            note = Notes.objects.get(pk=pk)
+            print(note)
+        except Notes.DoesNotExist:
+            return Response({"message":"Note not found"},status=status.HTTP_404_NOT_FOUND)
+        serializer = NotesSerializer(note,data=request.data,context={'user':request.user})
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message":"Note updated Successfully"},status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        
+    def delete(self,request,pk):
+        try:
+            note = Notes.objects.get(pk=pk)
+        except Notes.DoesNotExist:
+            return Response({"message":"Notes not found"},status = status.HTTP_404_NOT_FOUND)
+        note.delete()
+        return Response({"message":"Notes deleted Successfully"},status = status.HTTP_200_OK)
+        
+
+
+    
