@@ -1,4 +1,4 @@
-from .models import RegisterUser
+from .models import RegisterUser,Notes
 from rest_framework import serializers
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -17,5 +17,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length = 100)
     password = serializers.CharField(max_length=200, write_only=True)
-        
+
+class NotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = ('id','user','title', 'description')
+
 
